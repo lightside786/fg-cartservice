@@ -1,0 +1,61 @@
+package com.lightside.fg.service.impl;
+
+import com.lightside.fg.domain.Cart;
+import com.lightside.fg.repository.ICartRepository;
+import com.lightside.fg.service.CartService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author Anwar
+ */
+
+@Component
+@Slf4j
+public class CartServiceImpl implements CartService {
+
+    private com.lightside.fg.repository.ICartRepository ICartRepository;
+
+    public CartServiceImpl(ICartRepository ICartRepository) {
+        this.ICartRepository = ICartRepository;
+    }
+
+    @Override
+    public Cart createCart(Cart cart) {
+        log.info("Creating Cart : {}", cart);
+        return ICartRepository.save(cart);
+    }
+
+    @Override
+    public Cart updateCart(Cart cart) {
+        return ICartRepository.save(cart);
+    }
+
+    @Override
+    public Cart getCartByRecordId(final String recordIdentifier) {
+        return ICartRepository.findByRecordId(recordIdentifier);
+    }
+
+    @Override
+    public Cart getCartById(final Long id) {
+        return ICartRepository.findById(id);
+    }
+
+    @Override
+    public Page<Cart> getCarts(Pageable pageable) {
+        return ICartRepository.findAll(pageable);
+    }
+
+    @Override
+    public void delete(final Long id) {
+        ICartRepository.delete(id);
+    }
+
+    @Override
+    public void deleteByRecordId(final String recordIdentifier) {
+        ICartRepository.deleteByRecordId(recordIdentifier);
+    }
+
+}
