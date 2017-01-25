@@ -17,7 +17,7 @@ public class CartDtoMapper extends MapperAdapter<Cart, CartDto> implements Conve
     public CartDto map(Cart cart) {
         CartDto cartDto = CartDto
                 .builder()
-                .id(cart.getRecordId())
+                .recordId(cart.getRecordId())
                 .userId(cart.getUserId())
                 .itemCount(cart.getItemCount())
                 .total(cart.getTotal())

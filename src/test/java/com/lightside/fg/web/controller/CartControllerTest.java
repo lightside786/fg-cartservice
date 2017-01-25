@@ -32,10 +32,10 @@ public class CartControllerTest extends GenericControllerTest {
 
     @Test
     public void testGetCartWithID() throws Exception {
-        this.mockMvc.perform(get("/api/v1/cart/init-cart-record-id-1000001"))
+        this.mockMvc.perform(get("/api/v1/cart/init-cart-record-recordId-1000001"))
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("init-cart-record-id-1000001"))
+                .andExpect(jsonPath("$.recordId").value("init-cart-record-recordId-1000001"))
                 .andExpect(jsonPath("$.userId").value("mcrawford0"))
                 .andExpect(jsonPath("$.itemCount").value("95"))
                 .andExpect(jsonPath("$.total").value("1"))
@@ -47,7 +47,7 @@ public class CartControllerTest extends GenericControllerTest {
 
     @Test
     public void testDeleteCartByID() throws Exception {
-        ResultActions result = this.mockMvc.perform(delete("/api/v1/cart/id/initial-test-cart-0001-shipaddrid"))
+        ResultActions result = this.mockMvc.perform(delete("/api/v1/cart/init-cart-record-recordId-1000001"))
                 .andExpect(status().isOk());
     }
 

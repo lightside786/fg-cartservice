@@ -20,7 +20,7 @@ import java.util.Collections;
 @Builder
 public class CreateCartResponse {
     private String userId;
-    private String id;
+    private String recortId;
     private Integer itemCount;
     private BigDecimal total;
     private String shipAddressId;

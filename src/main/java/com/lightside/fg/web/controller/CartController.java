@@ -61,14 +61,14 @@ public class CartController implements ICartController {
         }
         log.info("Creating Cart with details : {}", createCartRequest);
         Cart cart = cartService.createCart(requestMapper.map(createCartRequest));
-        log.info("Cart created with id : {}", cart.getId());
+        log.info("Cart created with recordId : {}", cart.getId());
         return responseMapper.map(cart);
     }
 
     public CartDto getCart(@PathVariable(value = "recordId") String recordId) {
         Cart cart = null;
         if (StringUtils.isNotEmpty(recordId)) {
-            log.info("Retrieving Cart details for id : {}", recordId);
+            log.info("Retrieving Cart details for recordId : {}", recordId);
             cart = cartService.getCartByRecordId(recordId);
             log.info("Retrieved Cart with details : {}", cart);
         }
@@ -85,8 +85,7 @@ public class CartController implements ICartController {
         return page.map(cartDtoMapper);
     }
 
-    @Override
-    public void deleteCart(@PathVariable(value = "id") String id) {
-        cartService.deleteByRecordId(id);
+    public void deleteCart(@PathVariable(value = "recordId") String recordId) {
+        cartService.deleteByRecordId(recordId);
     }
 }

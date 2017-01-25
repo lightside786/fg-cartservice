@@ -41,13 +41,13 @@ public interface ICartController {
                                          @RequestBody @Valid CreateCartRequest createCartRequest, BindingResult errorResult);
 
     @ApiOperation(
-            value = "Retrieves a cart for the id",
+            value = "Retrieves a cart for the recordId",
             notes = "Retrieves cart",
             httpMethod = "GET",
             response = CreateCartResponse.class)
-    @ApiImplicitParam(name = "Record Identifier for Cart", value = "id", required = true, dataType = "string", paramType = "path", defaultValue = "initial-test-load-cartservice")
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public CartDto getCart(@PathVariable(value = "id") String id);
+    @ApiImplicitParam(name = "recordId", value = "recordId", required = true, dataType = "string", paramType = "path", defaultValue = "initial-test-load-cartservice")
+    @GetMapping(value = "/{recordId}", produces = APPLICATION_JSON_UTF8_VALUE)
+    public CartDto getCart(@PathVariable(value = "recordId") String recordId);
 
     @ApiOperation(
             value = "Retrieves all the carts in the system",
@@ -55,17 +55,19 @@ public interface ICartController {
             httpMethod = "GET",
             response = CreateCartResponse.class)
     @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public Page<CartDto> getCarts(Pageable pageable);
 
     @ApiOperation(
-            value = "Deletes cart specified with Id",
-            notes = "Deletes cart by Id",
+            value = "Deletes cart specified with record Id",
+            notes = "Deletes cart by record Id",
             httpMethod = "DELETE")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Record Identifier for Cart", value = "id", required = true, dataType = "string", paramType = "path", defaultValue = "initial-test-load-cartservice")
+            @ApiImplicitParam(name = "recordId", value = "recordId", required = true, dataType = "string", paramType = "path", defaultValue = "initial-test-load-cartservice")
     })
-    @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_UTF8_VALUE)
-    public void deleteCart(@PathVariable(value = "id") String id);
+    @DeleteMapping(value = "/{recordId}", produces = APPLICATION_JSON_UTF8_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCart(@PathVariable(value = "recordId") String recordId);
 
 
 }

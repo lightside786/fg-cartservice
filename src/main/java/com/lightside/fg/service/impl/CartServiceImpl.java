@@ -7,16 +7,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Anwar
  */
 
+@Transactional
 @Component
 @Slf4j
 public class CartServiceImpl implements CartService {
 
-    private com.lightside.fg.repository.ICartRepository ICartRepository;
+    private ICartRepository ICartRepository;
 
     public CartServiceImpl(ICartRepository ICartRepository) {
         this.ICartRepository = ICartRepository;

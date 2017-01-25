@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 public class CartDto {
-    private String id;
+    private String recordId;
     private String userId;
     private Integer itemCount;
     private BigDecimal total;

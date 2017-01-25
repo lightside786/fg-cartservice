@@ -16,7 +16,7 @@ public class CreateCartResponseMapper extends MapperAdapter<Cart, CreateCartResp
         return CreateCartResponse
                 .builder()
                 .userId(cart.getUserId())
-                .id(cart.getRecordId())
+                .recortId(cart.getRecordId())
                 .itemCount(cart.getItemCount())
                 .total(cart.getTotal())
                 .shipAddressId(cart.getShipAddressId())
