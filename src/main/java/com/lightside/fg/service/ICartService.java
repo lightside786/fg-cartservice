@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
  * @author Ummer Shervani
  */
 
-public interface CartService {
+public interface ICartService {
     /**
      * @param cart
      * @return

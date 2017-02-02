@@ -37,10 +37,7 @@ public class CartControllerTest extends GenericControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.recordId").value("init-cart-record-recordId-1000001"))
                 .andExpect(jsonPath("$.userId").value("mcrawford0"))
-                .andExpect(jsonPath("$.itemCount").value("95"))
-                .andExpect(jsonPath("$.total").value("1"))
-                .andExpect(jsonPath("$.shipAddressId").value("5cc99f21-ef2f-47a3-9f42-b7d824f56dea"))
-                .andExpect(jsonPath("$.billAddressId").value("4a12d561-583e-4282-b7fa-396d6e00c0b7"))
+                .andExpect(jsonPath("$.total").value("88"))
                 .andDo(print());
     }
 
@@ -56,12 +53,7 @@ public class CartControllerTest extends GenericControllerTest {
     public void testAddCart() throws Exception {
         Cart cart = Cart.builder()
                 .userId("unittester")
-                .paymentId("initial-test-cart-0003-paymentid")
-                .billAddressId("initial-test-cart-0001-billaddrid")
-                .shipAddressId("initial-test-cart-0001-shipaddrid")
-                .currencyCode("AED")
                 .total(BigDecimal.valueOf(10.00))
-                .itemCount(2)
                 .build();
 
 

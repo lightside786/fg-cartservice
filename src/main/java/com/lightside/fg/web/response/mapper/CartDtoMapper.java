@@ -1,17 +1,21 @@
-package com.lightside.fg.web.mapper;
+package com.lightside.fg.web.response.mapper;
 
 import com.lightside.fg.domain.Cart;
+import com.lightside.fg.web.mapper.MapperAdapter;
 import com.lightside.fg.web.response.CartDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Anwar
+ * @author Ummer
  */
 
 @Component
 public class CartDtoMapper extends MapperAdapter<Cart, CartDto> implements Converter<Cart, CartDto> {
 
+    @Autowired
+    CartItemResponseMapper cartItemResponseMapper;
 
     @Override
     public CartDto map(Cart cart) {
@@ -19,12 +23,11 @@ public class CartDtoMapper extends MapperAdapter<Cart, CartDto> implements Conve
                 .builder()
                 .recordId(cart.getRecordId())
                 .userId(cart.getUserId())
-                .itemCount(cart.getItemCount())
                 .total(cart.getTotal())
-                .shipAddressId(cart.getShipAddressId())
-                .billAddressId(cart.getBillAddressId())
-                .paymentId(cart.getPaymentId())
                 .createdOn(cart.getCreatedOn())
+                .updatedOn(cart.getUpdatedOn())
+                .lastAccessedOn(cart.getLastAccessedOn())
+                .cartItems(cartItemResponseMapper.map(cart.getCartItems()))
                 .build();
         return cartDto;
     }

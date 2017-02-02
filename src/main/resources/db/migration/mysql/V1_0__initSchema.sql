@@ -1,8 +1,3 @@
-use fgcart;
-drop table CART_ITEM;
-drop table CART_DISCOUNT;
-drop table DISCOUNT;
-drop table CART;
 
 
 CREATE TABLE `CART` (
@@ -57,10 +52,10 @@ CREATE TABLE `CART_ITEM` (
   `record_id`           VARCHAR(36),
   `cart_id`             BIGINT       NOT NULL,
   `product_id`          VARCHAR(36)  NOT NULL,
-  `primary_quantity`    DECIMAL(4,2) NOT NULL DEFAULT 0.00,
-  `secondary_quantity`  DECIMAL(4,2) NOT NULL DEFAULT 0.00,
+  `primary_quantity`    DECIMAL(5,2) NOT NULL,
+  `secondary_quantity`  DECIMAL(6,2) ,
   `primary_uom`         VARCHAR(36)  NOT NULL DEFAULT "KG",
-  `secondary_uom`       VARCHAR(36)  NOT NULL DEFAULT "KG",
+  `secondary_uom`       VARCHAR(36)  ,
   `price`               DECIMAL(8,2) NOT NULL,
   `total`               DECIMAL(12,2)  NOT NULL DEFAULT 0,
   `created_on`          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,

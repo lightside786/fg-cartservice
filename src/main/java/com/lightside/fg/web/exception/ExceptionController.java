@@ -49,7 +49,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     ResponseEntity<?> handleException(Exception ex) {
-        logger.error(ex);
+        logger.trace(ex);
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ErrorResponse errorResponse = buildError(messageResolver.resolveMessage("system.error.key"),
                 messageResolver.resolveMessage("system.error.message"));
@@ -59,21 +59,25 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
     ResponseEntity<?> handleException(DataIntegrityViolationException ex) {
-        logger.error(ex);
+        logger.trace(ex);
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ConstraintViolationException cve = (ConstraintViolationException) ex.getCause();
         String constraintName = cve.getConstraintName();
         ErrorResponse errorResponse = null;
         switch (constraintName) {
-            case "UK_CartS_USRID":
-                errorResponse = getErrorResponse("Cartid.alreadyexists.key", "Cartid.alreadyexists.message");
+            case "UK_CART_USRID":
+                errorResponse = getErrorResponse("cartid.alreadyexists.key", "cartid.alreadyexists.message");
                 break;
-            case "UK_CartS_EMAIL":
+            case "UK_CARTS_EMAIL":
                 errorResponse = getErrorResponse("email.alreadyexists.key", "email.alreadyexists.message");
                 break;
             case "UK_USR_CONTACT_NUMBER":
                 errorResponse = getErrorResponse("number.alreadyexists.key", "number.alreadyexists.message");
                 break;
+            case "UK_CART_ITEM_PROD_ID":
+                errorResponse = getErrorResponse("product for the user.alreadyexists.key", "number.alreadyexists.message");
+                break;
+
         }
         if (errorResponse != null) {
             return new ResponseEntity<>(getCreateOrUpdateCartErrorResponse(Collections.singleton(errorResponse)), status);

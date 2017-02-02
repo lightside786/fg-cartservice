@@ -1,6 +1,6 @@
 package com.lightside.fg.web.controller;
 
-import com.lightside.fg.web.request.CreateCartRequest;
+import com.lightside.fg.web.request.CartRequest;
 import com.lightside.fg.web.response.CartDto;
 import com.lightside.fg.web.response.CreateCartResponse;
 import io.swagger.annotations.*;
@@ -38,7 +38,22 @@ public interface ICartController {
     @PostMapping(consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CreateCartResponse createCart(@ApiParam(value = "Cart to insert", required = true)
-                                         @RequestBody @Valid CreateCartRequest createCartRequest, BindingResult errorResult);
+                                         @RequestBody @Valid CartRequest cartRequest, BindingResult errorResult);
+
+
+
+    @ApiOperation(
+            value = "Updates cart",
+            notes = "Updates  Cart for FG Service",
+            httpMethod = "PUT",
+            response = CreateCartResponse.class)
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "recordId", value = "record Id for Cart", required = true, dataType = "string", paramType = "path", defaultValue = "initial-cart-record-id")
+    })
+    @RequestMapping(value="/{recordId}",method=RequestMethod.PUT)
+    public CreateCartResponse updateCart(@PathVariable final String recordId,
+                                         @RequestBody CartRequest cartRequest, BindingResult errorResult);
 
     @ApiOperation(
             value = "Retrieves a cart for the recordId",

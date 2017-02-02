@@ -2,12 +2,14 @@ package com.lightside.fg.service.impl;
 
 import com.lightside.fg.domain.Cart;
 import com.lightside.fg.repository.ICartRepository;
-import com.lightside.fg.service.CartService;
+import com.lightside.fg.service.ICartService;
+import com.lightside.fg.web.exception.ErrorReporter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.ObjectError;
 
 /**
  * @author Anwar
@@ -16,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Component
 @Slf4j
-public class CartServiceImpl implements CartService {
+public class CartServiceImpl implements ICartService {
 
     private ICartRepository ICartRepository;
+
+    private ErrorReporter errorReporter;
 
     public CartServiceImpl(ICartRepository ICartRepository) {
         this.ICartRepository = ICartRepository;
@@ -32,6 +36,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart updateCart(Cart cart) {
+        if(cart.getId() == null  || cart.getId() <= 0){
+            errorReporter.createErrors(new ObjectError("cart.doesnotexist", "cart.doesnotexist"));
+        }
         return ICartRepository.save(cart);
     }
 
