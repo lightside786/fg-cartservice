@@ -30,7 +30,6 @@ mysql -u$username  -h$dbserver -p$powerpassword << EOF
 
 CREATE DATABASE fgcart DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-#CREATE USER 'butterknifecart'@'%' IDENTIFIED WITH sha256_password BY 'P@ssw0rd1234';
 CREATE USER 'fgcart'@'%' IDENTIFIED BY 'P@ssw0rd1234';
 GRANT select, insert, delete, update, create, drop, index, alter ON *.* TO 'fgcart'@'%';
 

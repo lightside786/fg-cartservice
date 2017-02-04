@@ -2,19 +2,20 @@ package com.lightside.fg.web.controller;
 
 import com.lightside.fg.domain.Cart;
 import com.lightside.fg.exception.NoRecordFoundException;
-import com.lightside.fg.service.CartService;
+import com.lightside.fg.service.ICartService;
 import com.lightside.fg.web.exception.ErrorReporter;
-import com.lightside.fg.web.mapper.CartDtoMapper;
-import com.lightside.fg.web.mapper.CreateCartResponseMapper;
-import com.lightside.fg.web.request.CreateCartRequest;
+import com.lightside.fg.web.request.CartRequest;
 import com.lightside.fg.web.request.mapper.CartRequestMapper;
 import com.lightside.fg.web.response.CartDto;
 import com.lightside.fg.web.response.CreateCartResponse;
+import com.lightside.fg.web.response.mapper.CartDtoMapper;
+import com.lightside.fg.web.response.mapper.CartResponseMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import javax.validation.Valid;
 ;
 
 /**
- * @author Anwar
+ * @author UmmerS
  */
 
 @RestController
@@ -33,43 +34,73 @@ import javax.validation.Valid;
 @Slf4j
 public class CartController implements ICartController {
 
-    private CartService cartService;
+    private ICartService ICartService;
     private CartRequestMapper requestMapper;
-    private CreateCartResponseMapper responseMapper;
+    private CartResponseMapper responseMapper;
     private CartDtoMapper cartDtoMapper;
     private ErrorReporter errorReporter;
 
-    public CartController(CartService cartService,
+    public CartController(ICartService ICartService,
                           CartRequestMapper requestMapper,
-                          CreateCartResponseMapper responseMapper,
+                          CartResponseMapper responseMapper,
                           CartDtoMapper cartDtoMapper, ErrorReporter errorReporter) {
-        this.cartService = cartService;
+        this.ICartService = ICartService;
         this.requestMapper = requestMapper;
         this.responseMapper = responseMapper;
         this.cartDtoMapper = cartDtoMapper;
         this.errorReporter = errorReporter;
     }
 
-    public CreateCartResponse createCart(@RequestBody @Valid CreateCartRequest createCartRequest,
+    public CreateCartResponse createCart(@RequestBody @Valid CartRequest cartRequest,
                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            log.info("Error creating Cart : {}", createCartRequest);
+            log.info("Error creating Cart : {}", cartRequest);
             return CreateCartResponse.builder()
                     .errors(errorReporter.createErrors(bindingResult))
                     .valid(false)
                     .build();
         }
-        log.info("Creating Cart with details : {}", createCartRequest);
-        Cart cart = cartService.createCart(requestMapper.map(createCartRequest));
-        log.info("Cart created with id : {}", cart.getId());
+        log.info("Creating Cart with details : {}", cartRequest);
+        Cart cart = ICartService.createCart(requestMapper.map(cartRequest));
+        log.info("Cart created with recordId : {}", cart.getId());
         return responseMapper.map(cart);
+    }
+
+
+    public CreateCartResponse updateCart(@PathVariable(value = "recordId") String recordId, @RequestBody @Valid CartRequest cartRequest, BindingResult bindingResult) {
+        Cart cart = null;
+        if (bindingResult.hasErrors()) {
+            log.info("Error updating Cart : {}", cartRequest);
+            return CreateCartResponse.builder()
+                    .errors(errorReporter.createErrors(bindingResult))
+                    .valid(false)
+                    .build();
+        }
+
+        if(StringUtils.isNotBlank(recordId)){
+            cart = ICartService.getCartByRecordId(recordId);
+            if(cart == null){
+                log.info("Cart cannot be found for update request");
+                return CreateCartResponse
+                        .builder()
+                        .errors(errorReporter.createErrors(new ObjectError("cart.doesnotexist", "cart.doesnotexist")))
+                        .build();
+            }
+        }
+        log.info("Updating Cart with details : {}", cartRequest);
+        cart =  requestMapper.map(cartRequest);
+        cart.setRecordId(recordId);
+        ICartService.updateCart(cart);
+        log.info("Cart updated with recordId : {}", cart.getId());
+        return responseMapper.map(cart);
+
     }
 
     public CartDto getCart(@PathVariable(value = "recordId") String recordId) {
         Cart cart = null;
         if (StringUtils.isNotEmpty(recordId)) {
-            log.info("Retrieving Cart details for id : {}", recordId);
-            cart = cartService.getCartByRecordId(recordId);
+            log.info("Retrieving Cart details for recordId : {}", recordId);
+            cart = ICartService.getCartByRecordId(recordId);
             log.info("Retrieved Cart with details : {}", cart);
         }
         if (cart == null) {
@@ -80,13 +111,14 @@ public class CartController implements ICartController {
 
     public Page<CartDto> getCarts(Pageable pageable) {
         log.info("Retrieving Cart details with paging : {}", pageable);
-        Page<Cart> page = cartService.getCarts(pageable);
+        Page<Cart> page = ICartService.getCarts(pageable);
         log.info("Retrieved : {} Cart records out of :{} total records", page.getNumberOfElements(), page.getTotalElements());
         return page.map(cartDtoMapper);
     }
 
-    @Override
-    public void deleteCart(@PathVariable(value = "id") String id) {
-        cartService.deleteByRecordId(id);
+    public void deleteCart(@PathVariable(value = "recordId") String recordId) {
+        ICartService.deleteByRecordId(recordId);
     }
+
+
 }

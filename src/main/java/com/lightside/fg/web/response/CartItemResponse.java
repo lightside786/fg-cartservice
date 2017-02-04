@@ -1,27 +1,36 @@
 package com.lightside.fg.web.response;
 
-
+import com.lightside.fg.web.request.ItemQuantity;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Collection;
 
-/**
- * @author Anwar
- */
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class CartDto {
+public class CartItemResponse {
+
     private String recordId;
-    private String userId;
+
+    private String productId;
+
+    private BigDecimal price;
+
+    private ItemQuantity primary;
+
+    private ItemQuantity secondary;
+
     private BigDecimal total;
+
     private Timestamp createdOn;
+
     private Timestamp updatedOn;
+
     private Timestamp lastAccessedOn;
-    private Collection<CartItemResponse> cartItems;
+
+
 }

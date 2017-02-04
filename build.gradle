@@ -1,65 +1,86 @@
 buildscript {
-	ext {
-		springBootVersion = '1.4.3.RELEASE'
-		swaggerReleaseVersion = '2.6.0'
-	}
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '1.4.4.RELEASE'
+        swaggerReleaseVersion = '2.6.0'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
+plugins {
+    id 'java'
+    id 'eclipse'
+    id "org.springframework.boot" version "1.4.4.RELEASE"
+    id 'idea'
+    id "org.flywaydb.flyway" version "4.0.3"
+}
 
 jar {
-	baseName = 'fg-cartservice'
-	version = '0.0.1-SNAPSHOT'
+    baseName = 'fg-cartservice'
+    version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url "https://repo.spring.io/milestone" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-actuator-docs')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	runtime('org.springframework.boot:spring-boot-devtools')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile('org.springframework.boot:spring-boot-starter-cache')
-	compile('org.springframework.cloud:spring-cloud-starter-bus-amqp')
-	compile('org.springframework.cloud:spring-cloud-starter-config')
-	compile('org.springframework.cloud:spring-cloud-cloudfoundry-connector:1.2.3.RELEASE')
-	compile('org.springframework.cloud:spring-cloud-spring-service-connector:1.2.3.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-actuator-docs')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    runtime('org.springframework.boot:spring-boot-devtools')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-cache')
+    compile('org.springframework.cloud:spring-cloud-starter-bus-amqp')
+    compile('org.springframework.cloud:spring-cloud-starter-config')
+    compile('org.springframework.cloud:spring-cloud-cloudfoundry-connector:1.2.3.RELEASE')
+    compile('org.springframework.cloud:spring-cloud-spring-service-connector:1.2.3.RELEASE')
     runtime('mysql:mysql-connector-java:6.0.5')
-	compile('org.projectlombok:lombok')
-	compile('org.springframework.retry:spring-retry')
-	compile('org.springframework.cloud:spring-cloud-starter-sleuth')
-	compile('org.springframework.boot:spring-boot-starter-data-rest')
-	compile('org.springframework.session:spring-session')
-	compile('org.springframework.boot:spring-boot-starter-validation')
-	compile("io.springfox:springfox-swagger2:${swaggerReleaseVersion}")
-	compile("io.springfox:springfox-swagger-ui:${swaggerReleaseVersion}")
-	compile("io.springfox:springfox-staticdocs:${swaggerReleaseVersion}")
-	compile "org.springframework.cloud:spring-cloud-starter-sleuth"
+    compile('org.projectlombok:lombok')
+    compile('org.springframework.retry:spring-retry')
+    compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+    compile('org.springframework.boot:spring-boot-starter-data-rest')
+    compile('org.springframework.session:spring-session')
+    compile('org.springframework.boot:spring-boot-starter-validation')
+    compile("io.springfox:springfox-swagger2:${swaggerReleaseVersion}")
+    compile("io.springfox:springfox-swagger-ui:${swaggerReleaseVersion}")
+    compile("io.springfox:springfox-staticdocs:${swaggerReleaseVersion}")
+    compile "org.springframework.cloud:spring-cloud-starter-sleuth"
+    compile "org.flywaydb:flyway-core:4.0.3"
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR4"
-	}
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR4"
+    }
+}
+
+// To start in debug, run your application  gradle bootRun -PspringDebug
+bootRun {
+
+    if (project.hasProperty('springDebug')) {
+        jvmArgs = ["-DXms512m", "-DXmx4g", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"]
+    }
+    systemProperties = System.properties
+    addResources = true
+
+}
+
+
+flyway {
+    url = 'jdbc:mysql://localhost:3306/fgcart?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false'
+    user = 'fgcart'
+    password = 'P@ssw0rd1234'
 }

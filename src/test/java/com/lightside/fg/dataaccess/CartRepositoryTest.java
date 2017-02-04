@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-@Sql(scripts = "classpath:dataCart.sql", config = @SqlConfig(transactionMode = SqlConfig.TransactionMode.DEFAULT))
+@Sql(scripts = "classpath:cart.sql", config = @SqlConfig(transactionMode = SqlConfig.TransactionMode.DEFAULT))
 public class CartRepositoryTest {
 
     @Autowired
@@ -24,11 +24,11 @@ public class CartRepositoryTest {
     @Test
     public void checkMethodFindByRecordId() {
 
-        Cart cart = cartRepository.findByRecordId("a9eb8e75-45f8-41e4-ab80-e02b6567a758");
+        Cart cart = cartRepository.findByRecordId("init-cart-record-recordId-1000001");
 
         Assert.assertNotNull("cart table should have values inserted for cart", cart);
 
-        Assert.assertTrue("cart key should be the same", cart.getId() == 1);
+        Assert.assertTrue("cart key should be the same", cart.getId() >= 1);
     }
 
 
