@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -19,6 +21,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Cart implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,26 +37,8 @@ public class Cart implements Serializable {
     @Column(name = "record_id", length = 36)
     private String recordId;
 
-    @Column(name = "item_count", nullable = false)
-    private Integer itemCount;
-
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
-
-    @Column(name = "ship_address_id" , length = 36)
-    private String shipAddressId;
-
-
-    @Column(name = "bill_address_id", length = 36)
-    private String billAddressId;
-
-    @Column(name = "currency_code" , length = 3)
-    private String currencyCode;
-
-
-    @Column(name = "payment_id" , length = 36)
-    private String paymentId;
-
 
     @Column(name = "created_on", nullable = false)
     private Timestamp createdOn;
@@ -64,6 +49,37 @@ public class Cart implements Serializable {
     @Column(name = "last_accessed_on")
     private Timestamp lastAccessedOn;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cart")
-    private List<CartItem> cartItems;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cart")
+    private Collection<CartItem> cartItems;
+
+    @Transient
+    private Set<String> promotionIds;
+
+    public BigDecimal getTotal() {
+        return recalculateTotal();
+    }
+
+
+    public void addCartItem(CartItem cartItem) {
+        if (this.getCartItems() == null) {
+            this.cartItems = new HashSet<>();
+        }
+        this.cartItems.add(cartItem);
+    }
+
+
+    public BigDecimal recalculateTotal() {
+        BigDecimal cartTotal = BigDecimal.ZERO;
+        if (null != this.cartItems && this.cartItems.size() > 0) {
+            for (CartItem cartItem : this.cartItems) {
+                cartTotal = cartTotal.add(cartItem.getTotal());
+            }
+        }
+        // @TODO
+        //this.applyCartDiscount();
+        return cartTotal;
+
+    }
+
+
 }

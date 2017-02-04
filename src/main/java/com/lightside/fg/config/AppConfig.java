@@ -15,7 +15,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EnableAspectJAutoProxy
 @EnableJpaRepositories(basePackages = "com.lightside.fg.repository")
 @ComponentScan(basePackages = "com.lightside.fg")
 @Slf4j

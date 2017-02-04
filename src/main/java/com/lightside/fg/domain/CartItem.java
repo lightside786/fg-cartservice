@@ -1,5 +1,6 @@
 package com.lightside.fg.domain;
 
+import com.lightside.fg.exception.ApplicationException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,8 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "productId")
+@ToString(exclude = "cart")
 public class CartItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,11 +33,22 @@ public class CartItem implements Serializable {
     @Column(name = "record_id", length = 36)
     private String recordId;
 
-    @Column(name = "product_id" , length = 36)
+    @Column(name = "product_id", length = 36)
     private String productId;
 
-    @Column(name = "quantity", nullable = false, precision = 4, scale = 2)
-    private Float quantity;
+    @Column(name = "primary_quantity", nullable = false, precision = 4, scale = 2)
+    private Double primaryQuantity;
+
+    @Column(name = "secondary_quantity", nullable = false, precision = 4, scale = 2)
+    private Double secondaryQuantity;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "primary_uom", nullable = false, precision = 4, scale = 2)
+    private UnitOfMeasure primaryUnitOfMeasure;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "secondary_uom", nullable = false, precision = 4, scale = 2)
+    private UnitOfMeasure secondaryUnitOfMeasure;
 
     @Column(nullable = false, precision = 4, scale = 2)
     private BigDecimal price;
@@ -52,9 +66,36 @@ public class CartItem implements Serializable {
     @Column(name = "last_accessed_on")
     private Timestamp lastAccessedOn;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
     private Cart cart;
 
+    public BigDecimal getTotal() {
+        return recalculateTotal();
+    }
 
+
+    private BigDecimal recalculateTotal() {
+        BigDecimal cartItemTotal = price.multiply(BigDecimal.valueOf(primaryQuantity));
+
+        if (null != secondaryQuantity && null != secondaryUnitOfMeasure) {
+
+            switch (secondaryUnitOfMeasure) {
+
+                case GM:
+                    cartItemTotal = cartItemTotal.add(price.multiply(BigDecimal.valueOf(secondaryQuantity / 1000)));
+                    break;
+                case LBS:
+                    cartItemTotal = cartItemTotal.add(price.multiply(BigDecimal.valueOf(secondaryQuantity)));
+                    break;
+                default:
+                    throw new ApplicationException("unsupported.quantity", "unsupported.quantity");
+//                    @TODO throw invalid quantity
+
+            }
+        }
+
+        return cartItemTotal;
+    }
 }
+

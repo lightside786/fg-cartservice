@@ -1,2 +1,6 @@
-insert into CART (record_id, user_id, item_count, total, currency_code, created_on, updated_on, last_accessed_on, ship_address_id, bill_address_id)
-values ('init-cart-record-id-1000001', 'mcrawford0', 97, 88, 'CNY', '2016-03-20', '2016-04-30', '2016-04-07', '1b646d7c-2ed3-4c07-b321-f8530913bee6', '1da7f057-2348-494d-b5d0-56f4ae60e261');
+insert into CART (id, record_id, user_id, total, created_on, updated_on, last_accessed_on) values
+(11, 'init-cart-record-recordId-1000001', 'ummerstest', 39, '2016-08-08', '2016-10-24', '2016-10-10');
+
+
+insert into cart_item (id, record_id, cart_id, product_id, primary_quantity, secondary_quantity, primary_uom, secondary_uom, price, total, created_on, updated_on, last_accessed_on) values
+ (11, 'init-cart-item-recordId-1000001', 11, '111690ab-a981-4122-b2f3-2467647c47fc', 75,  NULL , 'EACH', NULL, 1.72, 83.45, '2016-01-25', '2016-01-23', '2016-09-12');

@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 /**
- * @author Anwar
+ * @author Ummers
  */
 
 @Configuration
@@ -78,7 +78,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
                 .select()
                 .paths(regex("/api/v1.*"))
                 .build()
-                .globalOperationParameters(commonHeaderParameters())
+//                .globalOperationParameters(commonHeaderParameters())
                 .alternateTypeRules(getAlternateRule())
                 .directModelSubstitute(LocalDate.class, String.class)
                 .genericModelSubstitutes(ResponseEntity.class)
