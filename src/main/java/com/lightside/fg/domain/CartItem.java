@@ -76,7 +76,7 @@ public class CartItem implements Serializable {
     private BigDecimal recalculateTotal() {
         BigDecimal cartItemTotal = price.multiply(BigDecimal.valueOf(primaryQuantity));
 
-        if (null != secondaryQuantity) {
+        if (null != secondaryQuantity && null != secondaryUnitOfMeasure) {
 
             switch (secondaryUnitOfMeasure) {
 

@@ -31,7 +31,7 @@ public class CartServiceImpl implements ICartService {
     @Override
     public Cart createCart(Cart cart) {
         log.info("Creating Cart : {}", cart);
-        return ICartRepository.save(cart);
+        return ICartRepository.saveAndFlush(cart);
     }
 
     @Override

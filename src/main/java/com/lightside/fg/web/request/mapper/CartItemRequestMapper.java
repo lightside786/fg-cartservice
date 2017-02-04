@@ -18,7 +18,6 @@ public class CartItemRequestMapper extends MapperAdapter<CartItemRequest, CartIt
     public CartItem map(CartItemRequest cartItemRequest) {
 
         CartItem cartItem = CartItem.builder()
-                .total(cartItemRequest.getTotal())
                 .price(cartItemRequest.getPrice())
                 .primaryQuantity(cartItemRequest.getPrimary().getQuantity())
                 .productId(cartItemRequest.getProductId())

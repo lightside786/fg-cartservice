@@ -62,7 +62,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         logger.trace(ex);
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ConstraintViolationException cve = (ConstraintViolationException) ex.getCause();
-        String constraintName = cve.getConstraintName();
+        String constraintName = cve.getConstraintName() == null ? "DEFAULT" : cve.getConstraintName();
         ErrorResponse errorResponse = null;
         switch (constraintName) {
             case "UK_CART_USRID":
@@ -75,8 +75,10 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 errorResponse = getErrorResponse("number.alreadyexists.key", "number.alreadyexists.message");
                 break;
             case "UK_CART_ITEM_PROD_ID":
-                errorResponse = getErrorResponse("product for the user.alreadyexists.key", "number.alreadyexists.message");
+                errorResponse = getErrorResponse("product.alreadyexists.key", "product.alreadyexists.message");
                 break;
+            default:
+                errorResponse = getErrorResponse("db.constraint.violation.key", "db.constraint.violation.message");
 
         }
         if (errorResponse != null) {

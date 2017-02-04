@@ -68,15 +68,21 @@ CREATE TABLE `CART_ITEM` (
     ON DELETE CASCADE
 );
 
+delimiter |
 
-CREATE TRIGGER before_insert_cart
-BEFORE INSERT ON CART
+CREATE TRIGGER before_insert_cart BEFORE INSERT ON CART FOR EACH ROW
+  BEGIN
+    IF ( NEW.record_id IS NULL ) THEN
+      SET NEW.record_id = uuid();
+    END IF;
+  END;
+|
+
+CREATE TRIGGER before_insert_cartItem BEFORE INSERT ON CART_ITEM
 FOR EACH ROW
-  SET NEW.record_id = uuid();
-
-
-
-CREATE TRIGGER before_insert_cartItem
-BEFORE INSERT ON CART_ITEM
-FOR EACH ROW
-  SET NEW.record_id = uuid();
+  BEGIN
+   IF ( NEW.record_id IS NULL ) THEN
+      SET NEW.record_id = uuid();
+   END IF;
+  END;
+|

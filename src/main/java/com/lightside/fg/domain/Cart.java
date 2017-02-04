@@ -69,8 +69,10 @@ public class Cart implements Serializable {
 
     public BigDecimal recalculateTotal() {
         BigDecimal cartTotal = BigDecimal.ZERO;
-        for (CartItem cartItem : this.cartItems) {
-            cartTotal = cartTotal.add(cartItem.getTotal());
+        if (null != this.cartItems && this.cartItems.size() > 0) {
+            for (CartItem cartItem : this.cartItems) {
+                cartTotal = cartTotal.add(cartItem.getTotal());
+            }
         }
         // @TODO
         //this.applyCartDiscount();

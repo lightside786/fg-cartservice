@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 /**
  * @author Anwar
  */
@@ -25,14 +28,15 @@ public class CartRequestMapper extends MapperAdapter<CartRequest, Cart> {
         CartItem cartItem = null;
         Cart cart = Cart.builder()
                 .userId(cartRequest.getUserId())
-                .total(cartRequest.getTotal())
+                .createdOn(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
         for (CartItemRequest cartRequestItem : cartRequest.getCartItems()) {
             cartItem = cartItemRequestMapper.map(cartRequestItem);
             cartItem.setCart(cart);
+            cartItem.setTotal(cartItem.getTotal());
             cart.addCartItem(cartItem);
         }
-
+        cart.setTotal(cart.getTotal());
         return cart;
     }
 }

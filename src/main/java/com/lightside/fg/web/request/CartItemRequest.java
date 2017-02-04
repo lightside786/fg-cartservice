@@ -27,10 +27,4 @@ public class CartItemRequest {
 
     private ItemQuantity secondary;
 
-    private BigDecimal total;
-
-    public BigDecimal getTotal(){
-        return BigDecimal.TEN;
-    }
-
 }
