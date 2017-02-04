@@ -18,6 +18,8 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "productId")
+@ToString(exclude = "cart")
 public class CartItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
