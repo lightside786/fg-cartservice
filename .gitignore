@@ -11,4 +11,6 @@ build
 /target
 *.class
 .Ds_Store
-
+.ideaDataSources/
+dataSources/
+out/
