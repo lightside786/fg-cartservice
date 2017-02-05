@@ -98,6 +98,11 @@ public class CartControllerTest extends GenericControllerTest {
                 .content(cartJson))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.cart.total").value("510.0"))
+                .andExpect(jsonPath("$.cart.userId").value("unittester"))
+                .andExpect(jsonPath("$.cart.cartItems.[0].total").value("100.0"))
+                .andExpect(jsonPath("$.cart.cartItems.[1].total").value("210.0"))
+                .andExpect(jsonPath("$.cart.cartItems.[2].total").value("200.0"))
                 .andReturn();
 
     }
@@ -127,6 +132,7 @@ public class CartControllerTest extends GenericControllerTest {
                 .content(cartJson))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.total").value("100.0"))
                 .andReturn();
 
     }

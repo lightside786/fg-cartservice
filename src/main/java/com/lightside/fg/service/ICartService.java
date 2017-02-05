@@ -39,4 +39,6 @@ public interface ICartService {
 
     void deleteByRecordId(final String recordId);
 
+    Cart getCartByUserId(final String userId);
+
 }

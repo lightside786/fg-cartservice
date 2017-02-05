@@ -15,7 +15,6 @@ import org.springframework.validation.ObjectError;
  * @author Anwar
  */
 
-@Transactional
 @Component
 @Slf4j
 public class CartServiceImpl implements ICartService {
@@ -31,12 +30,12 @@ public class CartServiceImpl implements ICartService {
     @Override
     public Cart createCart(Cart cart) {
         log.info("Creating Cart : {}", cart);
-        return ICartRepository.saveAndFlush(cart);
+        return ICartRepository.save(cart);
     }
 
     @Override
     public Cart updateCart(Cart cart) {
-        if(cart.getId() == null  || cart.getId() <= 0){
+        if (cart.getId() == null) {
             errorReporter.createErrors(new ObjectError("cart.doesnotexist", "cart.doesnotexist"));
         }
         return ICartRepository.save(cart);
@@ -63,8 +62,15 @@ public class CartServiceImpl implements ICartService {
     }
 
     @Override
+    @Transactional
     public void deleteByRecordId(final String recordIdentifier) {
         ICartRepository.deleteByRecordId(recordIdentifier);
     }
+
+    @Override
+    public Cart getCartByUserId(final String userId) {
+        return ICartRepository.findByUserId(userId);
+    }
+
 
 }

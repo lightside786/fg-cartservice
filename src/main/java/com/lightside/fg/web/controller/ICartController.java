@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 /**
@@ -64,13 +65,25 @@ public interface ICartController {
     @GetMapping(value = "/{recordId}", produces = APPLICATION_JSON_UTF8_VALUE)
     public CartDto getCart(@PathVariable(value = "recordId") String recordId);
 
+
+    @ApiOperation(
+            value = "Retrieves a cart for the User",
+            notes = "Retrieves cart for a user",
+            httpMethod = "GET",
+            response = CreateCartResponse.class)
+    @ApiImplicitParam(name = "userName", value = "userName", required = true, dataType = "string", paramType = "query", defaultValue = "ummershervani")
+    @GetMapping(params = {"userName"}, consumes = ALL_VALUE , produces = APPLICATION_JSON_UTF8_VALUE)
+    public CartDto getCartByUser(@RequestParam("userName") String userName);
+
+
     @ApiOperation(
             value = "Retrieves all the carts in the system",
             notes = "Retrieves cart",
             httpMethod = "GET",
             response = CreateCartResponse.class)
-    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(consumes = APPLICATION_JSON_UTF8_VALUE , produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
+
     public Page<CartDto> getCarts(Pageable pageable);
 
     @ApiOperation(

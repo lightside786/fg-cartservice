@@ -16,10 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -101,6 +98,19 @@ public class CartController implements ICartController {
         if (StringUtils.isNotEmpty(recordId)) {
             log.info("Retrieving Cart details for recordId : {}", recordId);
             cart = ICartService.getCartByRecordId(recordId);
+            log.info("Retrieved Cart with details : {}", cart);
+        }
+        if (cart == null) {
+            throw new NoRecordFoundException("notfound.error.key", "notfound.error.message");
+        }
+        return cartDtoMapper.map(cart);
+    }
+
+    public CartDto getCartByUser(@RequestParam(value = "userName") String userId){
+        Cart cart = null;
+        if (StringUtils.isNotEmpty(userId)) {
+            log.info("Retrieving Cart details for userId : {}", userId);
+            cart = ICartService.getCartByUserId(userId);
             log.info("Retrieved Cart with details : {}", cart);
         }
         if (cart == null) {
