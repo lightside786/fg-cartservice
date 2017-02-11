@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Digits;
 
 /**
  * Created by ummers on 25/01/17.
@@ -20,8 +20,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class ItemQuantity {
 
-    @NotEmpty(message = "quantity.required")
-    @Size(min = 1, max = 20, message = "quantity.length")
+    @Digits(integer=4, fraction=2, message="quantity.length")
     private Double quantity;
 
     @NotEmpty(message = "unitofmeasure.required")

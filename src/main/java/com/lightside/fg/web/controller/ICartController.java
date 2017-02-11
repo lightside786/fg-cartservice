@@ -72,7 +72,7 @@ public interface ICartController {
             httpMethod = "GET",
             response = CreateCartResponse.class)
     @ApiImplicitParam(name = "userName", value = "userName", required = true, dataType = "string", paramType = "query", defaultValue = "ummershervani")
-    @GetMapping(params = {"userName"}, consumes = ALL_VALUE , produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/" , params = {"userName"}, consumes = ALL_VALUE , produces = APPLICATION_JSON_UTF8_VALUE)
     public CartDto getCartByUser(@RequestParam("userName") String userName);
 
 

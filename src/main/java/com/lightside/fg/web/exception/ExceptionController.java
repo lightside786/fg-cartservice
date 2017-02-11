@@ -6,6 +6,7 @@ import com.lightside.fg.exception.NoRecordFoundException;
 import com.lightside.fg.web.locale.MessageResolver;
 import com.lightside.fg.web.response.CreateCartResponse;
 import com.lightside.fg.web.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.exception.ConstraintViolationException;
@@ -14,13 +15,13 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 import static com.lightside.fg.web.response.ErrorResponse.buildError;
 
@@ -30,6 +31,7 @@ import static com.lightside.fg.web.response.ErrorResponse.buildError;
 
 @ControllerAdvice(basePackages = "com.lightside.fg.web.controller")
 @Configurable
+@Slf4j
 public class ExceptionController extends ResponseEntityExceptionHandler {
 
     @Autowired
@@ -65,6 +67,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         String constraintName = cve.getConstraintName() == null ? "DEFAULT" : cve.getConstraintName();
         ErrorResponse errorResponse = null;
         switch (constraintName) {
+//            @TODO we need to really pass arguments to errors
             case "UK_CART_USRID":
                 errorResponse = getErrorResponse("cartid.alreadyexists.key", "cartid.alreadyexists.message");
                 break;
@@ -75,11 +78,10 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
                 errorResponse = getErrorResponse("number.alreadyexists.key", "number.alreadyexists.message");
                 break;
             case "UK_CART_ITEM_PROD_ID":
-                errorResponse = getErrorResponse("product.alreadyexists.key", "product.alreadyexists.message");
+                errorResponse = getErrorResponse("product.cart.alreadyexists.key", "product.cart.alreadyexists.message");
                 break;
             default:
                 errorResponse = getErrorResponse("db.constraint.violation.key", "db.constraint.violation.message");
-
         }
         if (errorResponse != null) {
             return new ResponseEntity<>(getCreateOrUpdateCartErrorResponse(Collections.singleton(errorResponse)), status);
@@ -87,6 +89,26 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         return returnDefaultSystemError(status);
 
     }
+
+    public List<ErrorResponse> createErrors(ObjectError anyError, Object[] params) {
+        List<ErrorResponse> errors = new ArrayList<>();
+
+        if (anyError != null) {
+            {
+                String errorKey = anyError.getDefaultMessage() + ".key";
+                String errorMessageKey = anyError.getDefaultMessage() + ".message";
+                errors.add(buildError(messageResolver.resolveMessage(errorKey), messageResolver.resolveMessage(errorMessageKey , params)));
+            }
+            log.debug("Errors reported : {}", errors);
+
+        }
+      return errors;
+    }
+
+    public List<ErrorResponse> createErrors(ObjectError anyError) {
+        return createErrors(anyError , null);
+    }
+
 
     private ErrorResponse getErrorResponse(String errorCode, String errorMessage) {
         return ErrorResponse
@@ -133,4 +155,6 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
         }
         return HttpStatus.valueOf(statusCode);
     }
+
+
 }

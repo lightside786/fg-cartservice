@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-
 /**
  * The persistent class for the CartS database table.
  */
@@ -56,6 +55,7 @@ public class Cart implements Serializable {
     private Timestamp lastAccessedOn;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cart")
+    @OrderBy("id ASC")
     private Collection<CartItem> cartItems;
 
     @Transient

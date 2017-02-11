@@ -43,11 +43,11 @@ public class CartItem implements Serializable {
     private Double secondaryQuantity;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "primary_uom", nullable = false, precision = 4, scale = 2)
+    @Column(name = "primary_uom", nullable = false)
     private UnitOfMeasure primaryUnitOfMeasure;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "secondary_uom", nullable = false, precision = 4, scale = 2)
+    @Column(name = "secondary_uom", nullable = false)
     private UnitOfMeasure secondaryUnitOfMeasure;
 
     @Column(nullable = false, precision = 4, scale = 2)
@@ -94,7 +94,7 @@ public class CartItem implements Serializable {
 
             }
         }
-
+        this.setTotal(cartItemTotal);
         return cartItemTotal;
     }
 }
