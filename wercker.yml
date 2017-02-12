@@ -5,17 +5,17 @@ box: java
 #
 build:
   steps:
-    -script:
-      name: Build the code
-      code: |
-        ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -x test
+    - script:
+        name: Build
+        code: |
+           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -x test
 
 runtests:
-  steps:
-    -script:
-      name: gradletest
-      code: |
-        ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build
+   steps:
+    - script:
+        name: gradletest
+        code: |
+           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build
 
 #deploytodev:
 #  steps:
