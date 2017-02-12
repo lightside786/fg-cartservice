@@ -3,19 +3,19 @@ box: java
 
 # defining the dev pipeline
 #
-#build:
-#  steps:
-#    -script:
-#      name: Build the code
-#      code: |
-#        ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build -x test
+build:
+  steps:
+    -script:
+      name: Build the code
+      code: |
+        ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build -x test
 
 test:
   steps:
     -script:
       name: gradletest
       code: |
-        ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build -x
+        ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
 
 dev:
   steps:
