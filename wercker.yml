@@ -3,12 +3,20 @@ box: java
 
 # defining the dev pipeline
 #
+
 build:
   steps:
     - script:
         name: Build
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -x test
+
+flywaymigrate:
+    steps:
+      - script:
+          name: Migrate DB using Flyway
+          code: |
+             ./gradlew flywayMigrate
 
 runtests:
    steps:
