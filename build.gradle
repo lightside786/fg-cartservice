@@ -18,7 +18,7 @@ plugins {
     id 'eclipse'
     id "org.springframework.boot" version "1.5.0.RELEASE"
     id 'idea'
-    id "org.flywaydb.flyway" version "4.0.3"
+    id "org.flywaydb.flyway" version "4.1.1"
 }
 
 jar {
@@ -45,7 +45,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-cache')
     compile('org.springframework.cloud:spring-cloud-cloudfoundry-connector:1.2.3.RELEASE')
     compile('org.springframework.cloud:spring-cloud-spring-service-connector:1.2.3.RELEASE')
-    runtime('mysql:mysql-connector-java:6.0.5')
     compile('org.projectlombok:lombok')
     compile('org.springframework.retry:spring-retry')
     compile('org.springframework.cloud:spring-cloud-starter-sleuth')
@@ -55,8 +54,12 @@ dependencies {
     compile("io.springfox:springfox-swagger2:${swaggerReleaseVersion}")
     compile("io.springfox:springfox-swagger-ui:${swaggerReleaseVersion}")
     compile("io.springfox:springfox-staticdocs:${swaggerReleaseVersion}")
-    compile "org.flywaydb:flyway-core:4.0.3"
-    compile('org.springframework.cloud:spring-cloud-starter-consul-all')
+    compile('com.google.apis:google-api-services-sqladmin:v1beta4-rev30-1.22.0');
+    compile('com.google.cloud.sql:mysql-socket-factory:1.0.2');
+    compile "org.flywaydb:flyway-core:4.1.1"
+    runtime('mysql:mysql-connector-java:5.1.39')
+
+//    compile('org.springframework.cloud:spring-cloud-starter-consul-all')
 }
 
 dependencyManagement {
@@ -76,9 +79,13 @@ bootRun {
 
 }
 
-//
-//flyway {
-//    url = 'jdbc:mysql://localhost:3306/fgcart?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false'
-//    user = 'fgcart'
-//    password = 'P@ssw0rd1234'
-//}
+if(hasProperty('dbUrl')) {
+    project.ext['flyway.url'] = dbUrl
+}
+
+
+test {
+    systemProperty("spring.profiles.active", project.properties.get("springProfiles"))
+}
+
+task migrateDB (dependsOn: 'flywayMigrate')
