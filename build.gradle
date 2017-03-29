@@ -5,21 +5,24 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        jcenter()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:+'    // latest App Engine Gradle tasks
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "gradle.plugin.com.boxfuse.client:flyway-release:4.1.2"
     }
 }
 
-plugins {
-    id 'java'
-    id 'eclipse'
-    id "org.springframework.boot" version "1.5.0.RELEASE"
-    id 'idea'
-    id "org.flywaydb.flyway" version "4.1.1"
-}
+apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: "org.springframework.boot"
+apply plugin: 'idea'
+apply plugin: "org.flywaydb.flyway"
 
 jar {
     baseName = 'fg-cartservice'
@@ -79,7 +82,7 @@ bootRun {
 
 }
 
-if(hasProperty('dbUrl')) {
+if (hasProperty('dbUrl')) {
     project.ext['flyway.url'] = dbUrl
 }
 
@@ -88,4 +91,4 @@ test {
     systemProperty("spring.profiles.active", project.properties.get("springProfiles"))
 }
 
-task migrateDB (dependsOn: 'flywayMigrate')
+task migrateDB(dependsOn: 'flywayMigrate')
