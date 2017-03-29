@@ -42,7 +42,27 @@ public class CartControllerTest extends GenericControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.recordId").value("init-cart-record-recordId-1000001"))
                 .andExpect(jsonPath("$.userId").value("ummerstest"))
-                .andExpect(jsonPath("$.total").value("129.0"))
+                .andExpect(jsonPath("$.total").value("229.0"))
+                .andExpect(jsonPath("$.createdOn").isNotEmpty())
+                .andExpect(jsonPath("$.updatedOn").isNotEmpty())
+                .andExpect(jsonPath("$.cartItems[0].recordId").value("init-cart-item-recordId-1000001"))
+                .andExpect(jsonPath("$.cartItems[0].productId").value("init-cart-product-id-100001"))
+                .andExpect(jsonPath("$.cartItems[0].primary.quantity").value("75.0"))
+                .andExpect(jsonPath("$.cartItems[0].primary.unitOfMeasure").value("EACH"))
+                .andExpect(jsonPath("$.cartItems[0].secondary.quantity").doesNotExist())
+                .andExpect(jsonPath("$.cartItems[0].createdOn").isNotEmpty())
+                .andExpect(jsonPath("$.cartItems[0].updatedOn").isNotEmpty())
+                .andExpect(jsonPath("$.cartItems[0].price").value("1.72"))
+                .andExpect(jsonPath("$.cartItems[0].total").value("129.0"))
+                .andExpect(jsonPath("$.cartItems[1].recordId").value("init-cart-item-recordId-1000002"))
+                .andExpect(jsonPath("$.cartItems[1].productId").value("init-cart-product-id-100002"))
+                .andExpect(jsonPath("$.cartItems[1].primary.quantity").value("10.0"))
+                .andExpect(jsonPath("$.cartItems[1].primary.unitOfMeasure").value("EACH"))
+                .andExpect(jsonPath("$.cartItems[1].secondary.quantity").doesNotExist())
+                .andExpect(jsonPath("$.cartItems[1].createdOn").isNotEmpty())
+                .andExpect(jsonPath("$.cartItems[1].updatedOn").isNotEmpty())
+                .andExpect(jsonPath("$.cartItems[1].price").value("10.0"))
+                .andExpect(jsonPath("$.cartItems[1].total").value("100.0"))
                 .andDo(print());
     }
 
@@ -98,6 +118,11 @@ public class CartControllerTest extends GenericControllerTest {
                 .content(cartJson))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.cart.total").value("510.0"))
+                .andExpect(jsonPath("$.cart.userId").value("unittester"))
+                .andExpect(jsonPath("$.cart.cartItems.[0].total").value("100.0"))
+                .andExpect(jsonPath("$.cart.cartItems.[1].total").value("200.0"))
+                .andExpect(jsonPath("$.cart.cartItems.[2].total").value("210.0"))
                 .andReturn();
 
     }
@@ -110,7 +135,7 @@ public class CartControllerTest extends GenericControllerTest {
                 .build();
 
         CartItemRequest cartItemRequest = CartItemRequest.builder()
-                .price(BigDecimal.valueOf(10))
+                .price(BigDecimal.valueOf(32.5))
                 .primary(ItemQuantity.builder().quantity(Double.valueOf(10))
                         .unitOfMeasure(UnitOfMeasure.BOX)
                         .build())
@@ -127,6 +152,7 @@ public class CartControllerTest extends GenericControllerTest {
                 .content(cartJson))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.cart.cartItems.[0].total").value("325.0"))
                 .andReturn();
 
     }

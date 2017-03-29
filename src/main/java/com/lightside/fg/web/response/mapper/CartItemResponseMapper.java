@@ -23,6 +23,7 @@ public class CartItemResponseMapper extends MapperAdapter<CartItem, CartItemResp
                 .recordId(cartItem.getRecordId())
                 .total(cartItem.getTotal())
                 .price(cartItem.getPrice())
+                .productId(cartItem.getProductId())
                 .primary(ItemQuantity.builder().quantity(cartItem.getPrimaryQuantity())
                         .unitOfMeasure(cartItem.getPrimaryUnitOfMeasure())
                         .build())

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Anwar
@@ -26,6 +28,7 @@ public class CartRequestMapper extends MapperAdapter<CartRequest, Cart> {
     @Override
     public Cart map(CartRequest cartRequest) {
         CartItem cartItem = null;
+        Set<CartItem> cartItems= new LinkedHashSet<>();
         Cart cart = Cart.builder()
                 .userId(cartRequest.getUserId())
                 .createdOn(Timestamp.valueOf(LocalDateTime.now()))
@@ -34,8 +37,9 @@ public class CartRequestMapper extends MapperAdapter<CartRequest, Cart> {
             cartItem = cartItemRequestMapper.map(cartRequestItem);
             cartItem.setCart(cart);
             cartItem.setTotal(cartItem.getTotal());
-            cart.addCartItem(cartItem);
+            cartItems.add(cartItem);
         }
+        cart.setCartItems(cartItems);
         cart.setTotal(cart.getTotal());
         return cart;
     }

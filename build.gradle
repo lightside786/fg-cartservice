@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.4.RELEASE'
+        springBootVersion = '1.5.1.RELEASE'
         swaggerReleaseVersion = '2.6.0'
     }
     repositories {
@@ -16,7 +16,7 @@ buildscript {
 plugins {
     id 'java'
     id 'eclipse'
-    id "org.springframework.boot" version "1.4.4.RELEASE"
+    id "org.springframework.boot" version "1.5.1.RELEASE"
     id 'idea'
     id "org.flywaydb.flyway" version "4.0.3"
 }
@@ -63,7 +63,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR4"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR5"
     }
 }
 

@@ -2,18 +2,24 @@
 box: java
 
 # defining the dev pipeline
-
-test:
-  steps:
-    -script:
-      name: gradletest
-      code: |
-        ./gradlew clean test
-
-dev:
+#
+build:
   steps:
     - script:
-      name: gradle bootRun
-      code: |
-        ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build |
-        ./gradlew bootRun
+        name: Build
+        code: |
+           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -x test
+
+runtests:
+   steps:
+    - script:
+        name: gradletest
+        code: |
+           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build
+
+#deploytodev:
+#  steps:
+#    - script:
+#      name: gradle bootRun
+#      code: |
+#        ./gradlew bootRun

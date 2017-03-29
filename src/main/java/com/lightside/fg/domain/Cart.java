@@ -1,6 +1,8 @@
 package com.lightside.fg.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,15 +36,18 @@ public class Cart implements Serializable {
     @Column(name = "user_id", nullable = false, length = 20)
     private String userId;
 
+    @Generated(value = GenerationTime.INSERT)
     @Column(name = "record_id", length = 36)
     private String recordId;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
+    @Generated(value = GenerationTime.INSERT)
     @Column(name = "created_on", nullable = false)
     private Timestamp createdOn;
 
+    @Generated(value = GenerationTime.INSERT)
     @Column(name = "updated_on")
     private Timestamp updatedOn;
 
@@ -50,6 +55,7 @@ public class Cart implements Serializable {
     private Timestamp lastAccessedOn;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cart")
+    @OrderBy("id ASC")
     private Collection<CartItem> cartItems;
 
     @Transient
