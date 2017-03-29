@@ -3,6 +3,13 @@ box: java
 
 # defining the dev pipeline
 #
+
+flywaymigrate:
+    steps:
+      - script:
+          name: Migrate DB using Flyway
+          code: |
+             ./gradlew migrateDB -PdbUrl=jdbc:mysql://google/fgcart?cloudSqlInstance=marine-shell-158521:us-east1:fg-db&socketFactory=com.google.cloud.sql.mysql.SocketFactory&&useSSL=true
 build:
   steps:
     - script:
@@ -15,7 +22,7 @@ runtests:
     - script:
         name: gradletest
         code: |
-           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build
+           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=gcp
 
 #deploytodev:
 #  steps:
