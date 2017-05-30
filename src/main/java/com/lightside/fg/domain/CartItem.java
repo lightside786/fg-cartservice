@@ -2,8 +2,13 @@ package com.lightside.fg.domain;
 
 import com.lightside.fg.exception.ApplicationException;
 import lombok.*;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -57,12 +62,15 @@ public class CartItem implements Serializable {
     private BigDecimal total;
 
 
+    @org.hibernate.annotations.Generated(value = GenerationTime.INSERT)
     @Column(name = "created_on", nullable = false)
     private Timestamp createdOn;
 
+    @Generated(value = GenerationTime.ALWAYS)
     @Column(name = "updated_on")
     private Timestamp updatedOn;
 
+    @Generated(value = GenerationTime.ALWAYS)
     @Column(name = "last_accessed_on")
     private Timestamp lastAccessedOn;
 

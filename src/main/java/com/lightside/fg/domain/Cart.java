@@ -51,6 +51,7 @@ public class Cart implements Serializable {
     @Column(name = "updated_on")
     private Timestamp updatedOn;
 
+    @Generated(value = GenerationTime.ALWAYS)
     @Column(name = "last_accessed_on")
     private Timestamp lastAccessedOn;
 
