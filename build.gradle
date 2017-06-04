@@ -39,7 +39,6 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
-
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-actuator-docs')
@@ -102,13 +101,13 @@ task migrateDB(dependsOn: 'flywayMigrate')
 task buildDocker(type: Docker) {
     baseImage = 'develar/java:latest'
     push = project.hasProperty('push')
-    tag = 'ummershervani/fg-cartservice'
+    tag = 'lightsidenemo/fg-cartservice'
     addFile {
         from jar
         rename {'app.jar'}
     }
-    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
-     exposePort(8080)
+    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom -DXms512m -DXmx1g', '-jar', '/app.jar'])
+    exposePort(8080)
 }
 
 buildDocker.dependsOn(build)
