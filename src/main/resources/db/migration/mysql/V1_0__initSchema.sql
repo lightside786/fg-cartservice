@@ -8,8 +8,8 @@ CREATE TABLE `cart` (
   `created_on`       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_on`       TIMESTAMP		NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on` TIMESTAMP		NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE `uk_cart_usrid` (user_id),
-  CONSTRAINT UNIQUE `uk_cart_record_id` (record_id)
+  CONSTRAINT UNIQUE `UK_CART_USRID` (user_id),
+  CONSTRAINT UNIQUE `UK_CART_RECORD_ID` (record_id)
 );
 
 CREATE TABLE `discount` (
@@ -24,8 +24,8 @@ CREATE TABLE `discount` (
   `start_date`       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on` TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date`         TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE `uk_disc_id` (record_id),
-  CONSTRAINT UNIQUE `uk_code_id` (code)
+  CONSTRAINT UNIQUE `UK_DISC_ID` (record_id),
+  CONSTRAINT UNIQUE `UK_CODE_ID` (code)
 );
 
 
@@ -37,8 +37,8 @@ CREATE TABLE `cart_discount` (
   `created_on`       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_on`       TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on` TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE `uk_cart_disc_id` (record_id),
-  CONSTRAINT UNIQUE `uk_cart_id_disc_id` (cart_id, discount_id),
+  CONSTRAINT UNIQUE `UK_CART_DISC_ID` (record_id),
+  CONSTRAINT UNIQUE `UK_CART_ID_DISC_ID` (cart_id, discount_id),
   FOREIGN KEY (cart_id)
   REFERENCES cart (id)
     ON DELETE CASCADE,
@@ -61,8 +61,8 @@ CREATE TABLE `cart_item` (
   `created_on`          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_on`          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on`    TIMESTAMP		 NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE     `uk_cart_item_id` (record_id),
-  CONSTRAINT UNIQUE     `uk_cart_item_prod_id` (cart_id ,product_id),
+  CONSTRAINT UNIQUE     `UK_CART_ITEM_ID` (record_id),
+  CONSTRAINT UNIQUE     `UK_CART_ITEM_PROD_ID` (cart_id ,product_id),
   FOREIGN KEY (cart_id)
   REFERENCES cart (id)
     ON DELETE CASCADE
