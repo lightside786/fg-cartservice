@@ -9,7 +9,7 @@ flywaymigrate:
       - script:
           name: Migrate DB using Flyway
           code: |
-             ./gradlew migrateDB -PdbUrl=jdbc:mysql://google/fgcart?cloudSqlInstance=marine-shell-158521:us-east1:fg-db&socketFactory=com.google.cloud.sql.mysql.SocketFactory&&useSSL=true
+             ./gradlew migrateDB -PdbUrl=jdbc:mysql://fgcart.cw8ksjytudj2.us-east-1.rds.amazonaws.com:3306/fgcart?useSSL=false&useUnicode=true&&characterEncoding=utf8
 build:
   steps:
     - script:
@@ -22,7 +22,7 @@ runtests:
     - script:
         name: gradletest
         code: |
-           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=gcp
+           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=aws
 
 #deploytodev:
 #  steps:
