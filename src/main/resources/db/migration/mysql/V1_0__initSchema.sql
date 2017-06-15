@@ -1,6 +1,6 @@
 
 
-CREATE TABLE `CART` (
+CREATE TABLE `cart` (
   `id`               BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`        VARCHAR(36)    NOT NULL,
   `user_id`          VARCHAR(20),
@@ -12,7 +12,7 @@ CREATE TABLE `CART` (
   CONSTRAINT UNIQUE `UK_CART_RECORD_ID` (record_id)
 );
 
-CREATE TABLE `DISCOUNT` (
+CREATE TABLE `discount` (
   `id`               BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`        VARCHAR(36)    NOT NULL,
   `type`             VARCHAR(10)    NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `DISCOUNT` (
 );
 
 
-CREATE TABLE `CART_DISCOUNT` (
+CREATE TABLE `cart_discount` (
   `id`               BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`        VARCHAR(36)    NOT NULL,
   `cart_id`          BIGINT         NOT NULL,
@@ -40,14 +40,14 @@ CREATE TABLE `CART_DISCOUNT` (
   CONSTRAINT UNIQUE `UK_CART_DISC_ID` (record_id),
   CONSTRAINT UNIQUE `UK_CART_ID_DISC_ID` (cart_id, discount_id),
   FOREIGN KEY (cart_id)
-  REFERENCES CART (id)
+  REFERENCES cart (id)
     ON DELETE CASCADE,
   FOREIGN KEY (discount_id)
-  REFERENCES DISCOUNT (id)
+  REFERENCES discount (id)
     ON DELETE CASCADE
 );
 
-CREATE TABLE `CART_ITEM` (
+CREATE TABLE `cart_item` (
   `id`                  BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`           VARCHAR(36),
   `cart_id`             BIGINT       NOT NULL,
@@ -64,13 +64,13 @@ CREATE TABLE `CART_ITEM` (
   CONSTRAINT UNIQUE     `UK_CART_ITEM_ID` (record_id),
   CONSTRAINT UNIQUE     `UK_CART_ITEM_PROD_ID` (cart_id ,product_id),
   FOREIGN KEY (cart_id)
-  REFERENCES CART (id)
+  REFERENCES cart (id)
     ON DELETE CASCADE
 );
 
 delimiter |
 
-CREATE TRIGGER before_insert_cart BEFORE INSERT ON CART FOR EACH ROW
+CREATE TRIGGER before_insert_cart BEFORE INSERT ON cart FOR EACH ROW
   BEGIN
     IF ( NEW.record_id IS NULL ) THEN
       SET NEW.record_id = uuid();
@@ -78,7 +78,7 @@ CREATE TRIGGER before_insert_cart BEFORE INSERT ON CART FOR EACH ROW
   END;
 |
 
-CREATE TRIGGER before_insert_cartItem BEFORE INSERT ON CART_ITEM
+CREATE TRIGGER before_insert_cartItem BEFORE INSERT ON cart_item
 FOR EACH ROW
   BEGIN
    IF ( NEW.record_id IS NULL ) THEN
