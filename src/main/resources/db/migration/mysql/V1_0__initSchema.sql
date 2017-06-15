@@ -1,6 +1,6 @@
 
 
-CREATE TABLE `CART` (
+CREATE TABLE `cart` (
   `id`               BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`        VARCHAR(36)    NOT NULL,
   `user_id`          VARCHAR(20),
@@ -8,11 +8,11 @@ CREATE TABLE `CART` (
   `created_on`       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_on`       TIMESTAMP		NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on` TIMESTAMP		NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE `UK_CART_USRID` (user_id),
-  CONSTRAINT UNIQUE `UK_CART_RECORD_ID` (record_id)
+  CONSTRAINT UNIQUE `uk_cart_usrid` (user_id),
+  CONSTRAINT UNIQUE `uk_cart_record_id` (record_id)
 );
 
-CREATE TABLE `DISCOUNT` (
+CREATE TABLE `discount` (
   `id`               BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`        VARCHAR(36)    NOT NULL,
   `type`             VARCHAR(10)    NOT NULL,
@@ -24,12 +24,12 @@ CREATE TABLE `DISCOUNT` (
   `start_date`       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on` TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `end_date`         TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE `UK_DISC_ID` (record_id),
-  CONSTRAINT UNIQUE `UK_CODE_ID` (code)
+  CONSTRAINT UNIQUE `uk_disc_id` (record_id),
+  CONSTRAINT UNIQUE `uk_code_id` (code)
 );
 
 
-CREATE TABLE `CART_DISCOUNT` (
+CREATE TABLE `cart_discount` (
   `id`               BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`        VARCHAR(36)    NOT NULL,
   `cart_id`          BIGINT         NOT NULL,
@@ -37,17 +37,17 @@ CREATE TABLE `CART_DISCOUNT` (
   `created_on`       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_on`       TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on` TIMESTAMP		  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE `UK_CART_DISC_ID` (record_id),
-  CONSTRAINT UNIQUE `UK_CART_ID_DISC_ID` (cart_id, discount_id),
+  CONSTRAINT UNIQUE `uk_cart_disc_id` (record_id),
+  CONSTRAINT UNIQUE `uk_cart_id_disc_id` (cart_id, discount_id),
   FOREIGN KEY (cart_id)
-  REFERENCES CART (id)
+  REFERENCES cart (id)
     ON DELETE CASCADE,
   FOREIGN KEY (discount_id)
-  REFERENCES DISCOUNT (id)
+  REFERENCES discount (id)
     ON DELETE CASCADE
 );
 
-CREATE TABLE `CART_ITEM` (
+CREATE TABLE `cart_item` (
   `id`                  BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `record_id`           VARCHAR(36),
   `cart_id`             BIGINT       NOT NULL,
@@ -61,16 +61,16 @@ CREATE TABLE `CART_ITEM` (
   `created_on`          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_on`          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_accessed_on`    TIMESTAMP		 NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT UNIQUE     `UK_CART_ITEM_ID` (record_id),
-  CONSTRAINT UNIQUE     `UK_CART_ITEM_PROD_ID` (cart_id ,product_id),
+  CONSTRAINT UNIQUE     `uk_cart_item_id` (record_id),
+  CONSTRAINT UNIQUE     `uk_cart_item_prod_id` (cart_id ,product_id),
   FOREIGN KEY (cart_id)
-  REFERENCES CART (id)
+  REFERENCES cart (id)
     ON DELETE CASCADE
 );
 
 delimiter |
 
-CREATE TRIGGER before_insert_cart BEFORE INSERT ON CART FOR EACH ROW
+CREATE TRIGGER before_insert_cart BEFORE INSERT ON cart FOR EACH ROW
   BEGIN
     IF ( NEW.record_id IS NULL ) THEN
       SET NEW.record_id = uuid();
@@ -78,7 +78,7 @@ CREATE TRIGGER before_insert_cart BEFORE INSERT ON CART FOR EACH ROW
   END;
 |
 
-CREATE TRIGGER before_insert_cartItem BEFORE INSERT ON CART_ITEM
+CREATE TRIGGER before_insert_cartItem BEFORE INSERT ON cart_item
 FOR EACH ROW
   BEGIN
    IF ( NEW.record_id IS NULL ) THEN
