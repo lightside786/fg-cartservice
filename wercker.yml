@@ -23,6 +23,7 @@ runtests:
         name: gradletest
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=aws
+           docker build -t lightsidenemo/fg-cartservice .
 
 azure-push:
   steps:
