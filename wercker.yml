@@ -24,6 +24,21 @@ runtests:
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=aws
 
+azure-push:
+  steps:
+    - script:
+        code: |
+          echo 'hi from alpine'
+    - internal/docker-push:
+        azure-client-id: '5d2d8717-fbf1-4a32-8c3e-bbfa181a6bb7'
+        azure-client-secret: 'KU/OlOlSOwughOCDfVi6h7W902QYwqtSsqTofmeDCOA='
+        azure-subscription-id: 'a5fa51f9-7374-4270-a7c6-f7cb90493a5b'
+        azure-tenant-id: '1062da5f-d171-4785-99d6-bcc3895a3e86'
+        azure-resource-group: 'fgnemo'
+        azure-registry-name: 'fgnemo'
+        azure-login-server: 'fgnemo.azurecr.io'
+        repository: 'fgnemo'
+
 #deploytodev:
 #  steps:
 #    - script:
