@@ -23,7 +23,12 @@ runtests:
         name: gradletest
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=aws
-           docker build -t lightsidenemo/fg-cartservice .
+    - script:
+        name: copy jar
+        code: cp $WERCKER_SOURCE_DIR/build/libs/fg-cartservice-0.0.1-SNAPSHOT.jar  /app.jar
+    - script:
+        name: copy start sh
+        code: cp start.sh "$WERCKER_OUTPUT_DIR"
 
 azure-push:
   steps:
@@ -37,8 +42,10 @@ azure-push:
         azure-tenant-id: '1062da5f-d171-4785-99d6-bcc3895a3e86'
         azure-resource-group: 'fgnemo'
         azure-registry-name: 'fgnemo'
-        azure-login-server: 'fgnemo.azurecr.io'
+        azure-login-server: 'http://fgnemo.azurecr.io'
         repository: 'fgnemo'
+        tag: ${WERCKER_GIT_COMMIT}
+        cmd: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
 
 #deploytodev:
 #  steps:
