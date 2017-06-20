@@ -44,9 +44,10 @@ azure-push:
         tag: ${WERCKER_GIT_COMMIT}
         cmd: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
 
-#deploytodev:
-#  steps:
-#    - script:
-#      name: gradle bootRun
-#      code: |
-#        ./gradlew bootRun
+deploy:
+  steps:
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        command: create -f fg-service-deployment.yml
