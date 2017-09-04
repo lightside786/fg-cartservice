@@ -24,7 +24,10 @@ runtests:
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=aws
     - script:
         name: build docker
-        code: cp $WERCKER_SOURCE_DIR/build/libs/fg-cartservice-0.0.1-SNAPSHOT.jar  $WERCKER_OUTPUT_DIR/app.jar
+        code: cp $WERCKER_SOURCE_DIR/build/libs/fg-cartservice-0.0.1-SNAPSHOT.jar  $WERCKER_OUTPUT_DIR/opt/app.jar
+    - script:
+        name: move docker start file
+        code: cp $WERCKER_SOURCE_DIR/start.sh  $WERCKER_OUTPUT_DIR/opt/start.sh
 builddocker:
    steps:
     - script:
