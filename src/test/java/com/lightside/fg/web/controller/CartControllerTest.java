@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * * * Copyright (c) 2016 SAP/Concur Technologies - Present
  * Created by ummers on 10/11/16.
  * All Rights reserved.
  */

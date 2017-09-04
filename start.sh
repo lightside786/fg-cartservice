@@ -1,13 +1,16 @@
 #!/bin/bash
 
+echo "Executing docker start.sh file"
 if [ ! -z "${HEAP_JAVA_OPTS}" ]; then
 	export JAVA_OPTS="${JAVA_OPTS} ${HEAP_JAVA_OPTS}"
 fi
 
+echo ${SPRING_PROFILE}
 if [ ! -z "${SPRING_PROFILE}" ]; then
     export JAVA_OPTS="${JAVA_OPTS} -Dspring.profiles.active=${SPRING_PROFILE}"
     export MONITORING_JAVA_OPTS="${MONITORING_JAVA_OPTS} -Dnewrelic.environment=${SPRING_PROFILE}"
 else
+    echo ${SPRING_PROFILE}
     export JAVA_OPTS="${JAVA_OPTS} -Dspring.profiles.active=aws"
 fi
 

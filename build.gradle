@@ -96,18 +96,16 @@ test {
 
 task migrateDB(dependsOn: 'flywayMigrate')
 
-
-
 task buildDocker(type: Docker) {
     baseImage = 'develar/java:latest'
-    push = project.hasProperty('push')
-    tag = 'lightsidenemo/fg-cartservice'
-    addFile {
-        from jar
-        rename {'app.jar'}
-    }
-    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom -DXms512m -DXmx1g', '-jar', '/app.jar'])
+    applicationName = "fg-cartservice"
+    tagVersion = "latest"
+
+    addFile(jar.getArchivePath(), "/opt/app.jar")
+    addFile("start.sh", "/opt/start.sh")
+    entryPoint(["sh", "/opt/start.sh"])
     exposePort(8080)
+    exposePort(3006)
 }
 
 buildDocker.dependsOn(build)

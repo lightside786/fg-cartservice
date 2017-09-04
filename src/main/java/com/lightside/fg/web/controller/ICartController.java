@@ -36,7 +36,7 @@ public interface ICartController {
             httpMethod = "POST",
             response = CreateCartResponse.class)
 
-    @PostMapping(consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping( produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public CreateCartResponse createCart(@ApiParam(value = "Cart to insert", required = true)
                                          @RequestBody @Valid CartRequest cartRequest, BindingResult errorResult);
@@ -81,9 +81,8 @@ public interface ICartController {
             notes = "Retrieves cart",
             httpMethod = "GET",
             response = CreateCartResponse.class)
-    @GetMapping(consumes = APPLICATION_JSON_UTF8_VALUE , produces = APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-
     public Page<CartDto> getCarts(Pageable pageable);
 
     @ApiOperation(

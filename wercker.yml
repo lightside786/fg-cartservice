@@ -24,9 +24,14 @@ runtests:
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=aws
     - script:
-        name: copy jar
+        name: build docker
         code: cp $WERCKER_SOURCE_DIR/build/libs/fg-cartservice-0.0.1-SNAPSHOT.jar  $WERCKER_OUTPUT_DIR/app.jar
-
+builddocker:
+   steps:
+    - script:
+        name: builddocker
+        code: |
+           ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR buildDocker
 azure-push:
   steps:
     - script:

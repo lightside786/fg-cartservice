@@ -1,13 +1,38 @@
-apiVersion: v1
-kind: Pod
+apiVersion: fgservice/v1beta1
+kind: Deployment
 metadata:
-  name: fg-cartservice
-  labels:
-    app: fgcart
+  name: fgcartservice
 spec:
-  containers:
-  - image: lightsidenemo/fg-cartservice
-    name: fg-cartservice
-    ports:
-    - containerPort: 8080
-      hostPort: 8080
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fgcartservice
+    spec:
+      containers:
+      - name: fgcartservice
+        image: fgcartservice
+        ports:
+        - containerPort: 8080
+          name: fgcartservice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fgcartservice
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: fgcartservice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fgcartservice
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: fgcartservice
