@@ -3,7 +3,6 @@ box: java
 
 # defining the dev pipeline
 #
-
 flywaymigrate:
   steps:
     - script:
@@ -39,7 +38,7 @@ deploy:
         password: $DOCKER_HUB_PASSWORD
         tag: latest
         repository: lightsidenemo/fg-cartservice
-        registry: https://registry.hub.docker.com
+        registry: https://index.docker.io/v1/
 
 
 azure-push:
