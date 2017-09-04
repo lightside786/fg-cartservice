@@ -32,12 +32,14 @@ builddocker:
         name: builddocker
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR buildDocker
-pushDocker:
+deploy:
   steps:
-   - script:
-       name: pushDocker
-       code: |
-          ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR  pushDocker
+    - internal/docker-push:
+        username: $DOCKER_HUB_USERNAME
+        password: $DOCKER_HUB_PASSWORD
+        tag: latest
+        repository: lightsidenemo/fg-cartservice
+        registry: https://registry.hub.docker.com
 
 
 azure-push:
