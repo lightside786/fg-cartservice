@@ -31,6 +31,7 @@ runtests:
     - script:
         name: move docker start file
         code: cp $WERCKER_SOURCE_DIR/start.sh  $WERCKER_OUTPUT_DIR/opt/start.sh
+
 deploy:
   steps:
     - internal/docker-push:
@@ -39,8 +40,7 @@ deploy:
         tag: latest
         repository: lightsidenemo/fg-cartservice
         registry: https://index.docker.io/v1/
-
-
+        
 azure-push:
   steps:
     - script:
@@ -58,10 +58,3 @@ azure-push:
         tag: ${WERCKER_GIT_COMMIT}
         cmd: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
 
-deploy:
-  steps:
-    - kubectl:
-        server: $KUBERNETES_MASTER
-        username: $KUBERNETES_USERNAME
-        password: $KUBERNETES_PASSWORD
-        command: create -f fg-service-deployment.yml
