@@ -5,8 +5,8 @@ box: java
 #
 
 flywaymigrate:
-    steps:
-      - script:
+  steps:
+    - script:
           name: Migrate DB using Flyway
           code: |
              ./gradlew migrateDB -PdbUrl=jdbc:mysql://fgcart.cw8ksjytudj2.us-east-1.rds.amazonaws.com:3306/fgcart?useSSL=false&useUnicode=true&&characterEncoding=utf8
@@ -32,6 +32,14 @@ builddocker:
         name: builddocker
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR buildDocker
+pushDocker:
+  steps:
+   - script:
+       name: pushDocker
+       code: |
+          ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR  pushDocker
+
+
 azure-push:
   steps:
     - script:

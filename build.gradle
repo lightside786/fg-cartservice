@@ -18,6 +18,15 @@ buildscript {
     }
 }
 
+ext {
+    dockerRepo = "lightsidenemo"
+    dockerRepoUsername = System.getenv("DOCKER_HUB_USERNAME")
+    dockerRepoPassword = System.getenv("DOCKER_HUB_PASSWORD")
+    serviceName = "fg-cartservice"
+    dockerImageName = "${dockerRepo}/${serviceName}"
+    dockerImageTag = System.getProperty("imageVersion") ?: "latest"
+}
+
 apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -96,9 +105,40 @@ test {
 
 task migrateDB(dependsOn: 'flywayMigrate')
 
+
+task loginToDockerRepo () {
+    doLast {
+
+        def loggedIn = false, count = 0
+        while ( !loggedIn ) {
+            try {
+                exec {
+                    commandLine "docker", "login", "--username=${dockerRepoUsername}", "--password=${dockerRepoPassword}"
+                }
+                loggedIn = true
+            } catch (Exception e) {
+                if ( count++ > 5 ) throw e
+                else {
+                    print "Unable to login to ${dockerRepo} - trying again in 10 seconds..."
+                    sleep(10000)
+                }
+            }
+        }
+    }
+}
+
+
+task pushDocker(dependsOn: "loginToDockerRepo") {
+    doLast {
+        print "Pushing docker image "
+        exec { commandLine "docker", "push", "${dockerImageName}:${dockerImageTag}" }
+    }
+}
+
+
 task buildDocker(type: Docker) {
     baseImage = 'develar/java:latest'
-    applicationName = "fg-cartservice"
+    applicationName = "lightsidenemo/fg-cartservice"
     tagVersion = "latest"
 
     addFile(jar.getArchivePath(), "/opt/app.jar")
@@ -107,5 +147,7 @@ task buildDocker(type: Docker) {
     exposePort(8080)
     exposePort(3006)
 }
+
+
 
 buildDocker.dependsOn(build)
