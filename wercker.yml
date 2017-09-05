@@ -39,6 +39,7 @@ deploy:
         password: $DOCKER_HUB_PASSWORD
         tag: latest
         repository: lightsidenemo/fg-cartservice
+        registry: https://docker.io
 
 azure-push:
   steps:
