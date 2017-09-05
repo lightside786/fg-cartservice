@@ -38,7 +38,7 @@ deploy:
         username: $DOCKER_HUB_USERNAME
         password: $DOCKER_HUB_PASSWORD
         tag: latest
-        repository: fg-cartservice
+        repository: lightsidenemo/fg-cartservice
 
 azure-push:
   steps:
