@@ -22,20 +22,39 @@ runtests:
         name: gradletest
         code: |
            ./gradlew --project-cache-dir=$WERCKER_CACHE_DIR build -PspringProfiles=aws
+
+builddocker:
+  steps:
     - script:
         name: make opt dir
-        code: mkdir $WERCKER_OUTPUT_DIR/opt
+        code: |
+          mkdir $WERCKER_OUTPUT_DIR/opt
+          echo "Made opt directory"
     - script:
         name: build docker
-        code: cp $WERCKER_SOURCE_DIR/build/libs/*.jar  $WERCKER_OUTPUT_DIR/opt/app.jar
+        code: |
+          cp $WERCKER_SOURCE_DIR/build/libs/*.jar  $WERCKER_OUTPUT_DIR/opt/app.jar
+          echo "Copied app.jar"
     - script:
         name: move docker start file
-        code: cp $WERCKER_SOURCE_DIR/start.sh  $WERCKER_OUTPUT_DIR/opt/start.sh
+        code: |
+          cp $WERCKER_SOURCE_DIR/start.sh  $WERCKER_OUTPUT_DIR/opt/start.sh
+          echo "Copied start.sh"
     - script:
-        name: remove other dependencies
-        code: rm -rf $WERCKER_SOURCE_DIR/build
-
-
+        name: remove build
+        code: |
+          rm -rfv $WERCKER_SOURCE_DIR/build
+          echo "deleted build dir"
+    - script:
+        name: remove src
+        code: |
+          rm -vrf $WERCKER_SOURCE_DIR/src
+          echo "Deleted src dir"
+    - script:
+        name: remove gradle
+        code: |
+          rm -vrf $WERCKER_SOURCE_DIR/gradle
+          echo "Removed all gradle files"
 deploy:
   steps:
     - internal/docker-push:
@@ -43,6 +62,9 @@ deploy:
         password: $DOCKER_HUB_PASSWORD
         tag: latest
         repository: lightsidenemo/fg-cartservice
+        ports: "3306,8080,5005,9004"
+        entrypoint: "/opt/start.sh"
+        stopsignal: SIGTERM
 
 azure-push:
   steps:
