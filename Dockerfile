@@ -1,5 +1,4 @@
 FROM docker.io/java:8
-
 VOLUME /tmp
 
 # Expose ports.
